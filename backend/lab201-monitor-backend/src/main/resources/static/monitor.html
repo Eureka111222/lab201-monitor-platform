@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab201 监控简易看板</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; }
+        #app { display: flex; height: 100vh; }
+
+        /* 左侧侧边栏 */
+        .sidebar { width: 260px; background-color: #001529; color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; font-size: 18px; font-weight: bold; background-color: #002140; text-align: center; }
+        .server-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .server-item { padding: 15px; margin-bottom: 8px; cursor: pointer; border-radius: 4px; transition: all 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .server-item:hover { background-color: #1890ff; }
+        .server-item.active { background-color: #1890ff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .online { background-color: #52c41a; }
+        .offline { background-color: #ff4d4f; }
+
+        /* 右侧主内容 */
+        .main-content { flex: 1; padding: 20px; overflow-y: auto; }
+        .header-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .chart-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); height: 500px; }
+
+        .empty-tip { text-align: center; margin-top: 100px; color: #999; }
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 12px; background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+    </style>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <div class="sidebar">
+        <div class="sidebar-header">🔬 Lab201 监控中心</div>
+        <div class="server-list">
+            <div v-for="node in serverList" :key="node.id"
+                 class="server-item"
+                 :class="{ active: currentServer?.serverName === node.serverName }"
+                 @click="selectServer(node)">
+                <div>
+                    <div>{{ node.serverName }}</div>
+                    <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">{{ node.serverIp || '未知IP' }}</div>
+                </div>
+                <span class="status-dot" :class="node.status === 1 ? 'online' : 'offline'" :title="node.status === 1 ? '在线' : '离线'"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div v-if="currentServer">
+            <div class="header-card">
+                <div>
+                    <h2 style="margin: 0 0 10px 0;">🖥️ {{ currentServer.serverName }}</h2>
+                    <span class="tag">GPU: {{ currentServer.gpuModel || '未知型号' }}</span>
+                    <span class="tag" style="margin-left: 10px;">位置: {{ currentServer.location }}</span>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: bold; color: #1890ff;">
+                        {{ latestLog ? latestLog.temperature + '°C' : '--' }}
+                    </div>
+                    <div style="color: #666; font-size: 12px;">实时温度</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div id="gpuChart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+
+        <div v-else class="empty-tip">
+            <h2>👈 请在左侧选择一台服务器查看详情</h2>
+        </div>
+    </div>
+</div>
+
+<script>
+    const { createApp, ref, onMounted, onUnmounted, nextTick } = Vue;
+
+    createApp({
+        setup() {
+            // 响应式数据
+            const serverList = ref([]);
+            const currentServer = ref(null);
+            const latestLog = ref(null);
+            let myChart = null;
+            let timer = null;
+
+            // 1. 获取服务器列表
+            const fetchServers = async () => {
+                try {
+                    const res = await axios.get('/api/v1/server-node/all');
+                    if(res.data.code === 200) {
+                        serverList.value = res.data.data;
+                    }
+                } catch (err) {
+                    console.error("获取服务器失败", err);
+                }
+            };
+
+            // 2. 选中服务器
+            const selectServer = (node) => {
+                currentServer.value = node;
+                // 等待 DOM 更新后初始化图表
+                nextTick(() => {
+                    initChart();
+                    fetchGpuData();
+                });
+            };
+
+            // 3. 获取 GPU 监控数据并渲染图表
+            const fetchGpuData = async () => {
+                if (!currentServer.value) return;
+
+                try {
+                    // 调用你的分页接口，按时间倒序取最近的 50 条
+                    const res = await axios.get('/api/v1/gpu/list', {
+                        params: {
+                            serverName: currentServer.value.serverName,
+                            page: 1,
+                            size: 100 // 取最近100个点
+                        }
+                    });
+
+                    if (res.data.code === 200) {
+                        const records = res.data.data.records;
+                        if (records.length > 0) {
+                            latestLog.value = records[0]; // 第一条是最新的
+                            updateChart(records.reverse()); // 翻转数组，让时间从左到右
+                        }
+                    }
+                } catch (err) {
+                    console.error("获取监控数据失败", err);
+                }
+            };
+
+            // 4. 初始化 ECharts
+            const initChart = () => {
+                const chartDom = document.getElementById('gpuChart');
+                if (myChart) myChart.dispose(); // 销毁旧图表
+                myChart = echarts.init(chartDom);
+            };
+
+            // 5. 更新图表数据
+            const updateChart = (data) => {
+                // 提取所有时间点 (去重)
+                const times = [...new Set(data.map(item => item.createTime))];
+
+                // 既然可能有多个GPU (gpuIndex 0, 1)，我们需要按 gpuIndex 分组
+                // 简单起见，这里演示只画 "GPU 0" 的利用率
+                // 如果你想画所有卡，需要做更复杂的 Group By
+
+                const gpu0Data = data.filter(d => d.gpuIndex === 0);
+                const gpu1Data = data.filter(d => d.gpuIndex === 1); // 假设有卡1
+
+                const option = {
+                    title: { text: 'GPU 利用率 & 显存趋势' },
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: ['GPU 0 利用率', 'GPU 0 显存', 'GPU 1 利用率'] },
+                    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: gpu0Data.map(item => item.createTime.substring(11, 19)) // 只显示时分秒
+                    },
+                    yAxis: [
+                        { type: 'value', name: '利用率 (%)', max: 100 },
+                        { type: 'value', name: '显存 (MB)', position: 'right' }
+                    ],
+                    series: [
+                        {
+                            name: 'GPU 0 利用率',
+                            type: 'line',
+                            smooth: true,
+                            data: gpu0Data.map(item => item.utilization),
+                            itemStyle: { color: '#1890ff' },
+                            areaStyle: { opacity: 0.1 }
+                        },
+                        {
+                            name: 'GPU 0 显存',
+                            type: 'line',
+                            yAxisIndex: 1, // 使用右侧Y轴
+                            smooth: true,
+                            data: gpu0Data.map(item => item.memoryUsed),
+                            itemStyle: { color: '#52c41a' }
+                        },
+                        // 如果有第二张卡，展示这一行
+                        {
+                            name: 'GPU 1 利用率',
+                            type: 'line',
+                            smooth: true,
+                            data: gpu1Data.map(item => item.utilization),
+                            itemStyle: { color: '#faad14' },
+                            lineStyle: { type: 'dashed' }
+                        }
+                    ]
+                };
+
+                myChart.setOption(option);
+            };
+
+            // 生命周期
+            onMounted(() => {
+                fetchServers();
+                // 开启定时轮询 (每5秒刷新一次数据)
+                timer = setInterval(() => {
+                    if (currentServer.value) {
+                        fetchGpuData();
+                    } else {
+                        fetchServers(); // 如果没选服务器，就刷新列表状态
+                    }
+                }, 5000);
+            });
+
+            onUnmounted(() => {
+                if (timer) clearInterval(timer);
+                if (myChart) myChart.dispose();
+            });
+
+            return {
+                serverList,
+                currentServer,
+                latestLog,
+                selectServer
+            };
+        }
+    }).mount('#app');
+</script>
+
+</body>
+</html>

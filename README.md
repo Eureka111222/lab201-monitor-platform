@@ -5,7 +5,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Java](https://img.shields.io/badge/Java-17%2B-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-green)
 ![Vue](https://img.shields.io/badge/Vue.js-3.0-brightgreen)
 ![AI](https://img.shields.io/badge/AI-RAG%20%2B%20LLM-purple)
 
@@ -26,7 +26,7 @@
 ## 🛠️ 技术栈 (Tech Stack)
 
 ### 后端 (Backend)
-* **框架**: Java Spring Boot 3.2
+* **框架**: Java Spring Boot 3.5.9
 * **ORM**: MyBatis-Plus
 * **AI**: Spring AI (对接 Ollama + Milvus)
 * **数据库**: MySQL 8.0 (业务数据), Milvus (向量数据)
@@ -46,14 +46,14 @@
 ## 🚀 快速开始 (Quick Start)
 
 ### 1. 环境准备
-确保本地已安装 [Docker](https://www.docker.com/) 和 [JDK 17](https://www.oracle.com/java/)。
+确保本地已安装 [Docker](https://www.docker.com/) 和 [JDK 17](https://www.oracle.com/java/)。以下是开发流程，真正部署时都在docker内
 
 ### 2. 启动基础设施
 使用 Docker Compose 一键启动 MySQL, Milvus 和 Ollama。
 
 ```bash
 cd docker
-docker-compose up -d
+docker compose up -d
 ```
 
 ### 3. 初始化数据库
@@ -92,7 +92,7 @@ lab-monitor-platform/
 
 ### 7. 📝 开发进度
 
-请查看 [Project Kanban](此处贴你Github Project的链接)
+请查看[Project Kanban](https://github.com/users/Eureka111222/projects/3/views/1)
 
 ### 8. 👨‍💻 作者
 
