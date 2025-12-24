@@ -1,0 +1,1 @@
+import{_ as a,x as s,w as t,b as r,g as c,o as n}from"./index-61G-lBuW.js";const d={};function _(l,e){const o=c("el-card");return n(),s(o,{shadow:"never"},{default:t(()=>[...e[0]||(e[0]=[r("div",{class:"placeholder"},"知识库页面（稍后完善）",-1)])]),_:1})}const f=a(d,[["render",_],["__scopeId","data-v-8233b9d9"]]);export{f as default};

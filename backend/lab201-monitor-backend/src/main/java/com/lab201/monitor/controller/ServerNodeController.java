@@ -1,5 +1,6 @@
 package com.lab201.monitor.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lab201.monitor.common.result.Result;
 import com.lab201.monitor.entity.ServerNode;
@@ -7,6 +8,7 @@ import com.lab201.monitor.service.IServerNodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +27,43 @@ public class ServerNodeController {
         return Result.success(serverNodeService.list());
     }
 
+    //@Operation(summary = "分页查询服务器")
+    //@GetMapping("/page")
+    //public Result<Page<ServerNode>> pageList(
+    //        @RequestParam(defaultValue = "1") Integer page,
+    //        @RequestParam(defaultValue = "10") Integer size) {
+    //    return Result.success(serverNodeService.page(new Page<>(page, size)));
+    //}
+
     @Operation(summary = "分页查询服务器")
     @GetMapping("/page")
-    public Result<Page<ServerNode>> pageList(
+    public Result<Page<ServerNode>> page(
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        return Result.success(serverNodeService.page(new Page<>(page, size)));
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String keyword // 👈 1. 接收前端传来的 keyword
+    ) {
+        // 1. 创建分页对象
+        Page<ServerNode> pageParam = new Page<>(page, size);
+
+        // 2. 构建查询条件
+        LambdaQueryWrapper<ServerNode> wrapper = new LambdaQueryWrapper<>();
+
+        // 3. 核心搜索逻辑：如果 keyword 不为空，则拼接查询 SQL
+        if (StringUtils.hasText(keyword)) {
+            wrapper.and(w -> w
+                    .like(ServerNode::getServerName, keyword) // 主机名包含 keyword
+                    .or()
+                    .like(ServerNode::getServerIp, keyword)   // 或者 IP 包含 keyword
+                    .or()
+                    .like(ServerNode::getGpuModel, keyword)   // 或者 显卡型号 包含 keyword
+            );
+        }
+
+        // 4. 按创建时间倒序（新加的在前面）
+        wrapper.orderByDesc(ServerNode::getCreateTime);
+
+        // 5. 执行查询
+        return Result.success(serverNodeService.page(pageParam, wrapper));
     }
 
     @Operation(summary = "新增/注册服务器")
@@ -50,4 +83,5 @@ public class ServerNodeController {
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.success(serverNodeService.removeById(id));
     }
+
 }

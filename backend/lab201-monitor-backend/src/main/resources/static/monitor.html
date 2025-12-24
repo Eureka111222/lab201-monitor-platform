@@ -93,7 +93,7 @@
             // 1. 获取服务器列表
             const fetchServers = async () => {
                 try {
-                    const res = await axios.get('/api/v1/server-node/all');
+                    const res = await axios.get('/api/v1/server-node/list');
                     if(res.data.code === 200) {
                         serverList.value = res.data.data;
                     }

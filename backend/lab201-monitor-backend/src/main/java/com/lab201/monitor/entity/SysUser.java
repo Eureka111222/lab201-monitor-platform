@@ -39,4 +39,9 @@ public class SysUser extends BaseEntity {
     @Schema(description = "状态: 1正常 0禁用")
     @TableField(value = "status")
     private Integer status;
+
+    // 🔥 重点：这个字段数据库里没有，但是为了传给前端，我们手动加在这里
+    @Schema(description = "这个字段数据库里没有，但是为了传给前端，我们手动加在这里")
+    @TableField(exist = false)
+    private String role;
 }

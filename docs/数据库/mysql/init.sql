@@ -57,8 +57,20 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';
 
 -- 初始化数据
-INSERT INTO `sys_user` (`id`, `username`, `password`, `real_name`, `status`, `deleted`) 
-VALUES (1, 'lab201', '$2a$10$N.zmdr9k7uOCQb376ye6tup1Yc1G.j4z.w2.E5c.g.k.l.m.n', '实验室管理员', 1, 0);
+INSERT INTO `sys_user` ( `username`, `password`, `real_name`, `status`, `deleted`) 
+VALUES ('lab201', '$2a$10$N.zmdr9k7uOCQb376ye6tup1Yc1G.j4z.w2.E5c.g.k.l.m.n', '实验室管理员', 1, 0);
+
+-- INSERT INTO `sys_user` ( `username`, `password`, `real_name`, `status`, `deleted`) 
+-- VALUES ('chw', 'chw2023', '崔瀚文', 1, 0),
+-- ('xtt', 'xtt2023', '许彤彤', 1, 0),
+-- ('zxt', 'zxt2023', '曾晓涛', 1, 0),
+-- ('lj', 'lj2024', '梁锦', 1, 0),
+-- ('lyq', 'lyq2024', '刘渔清', 1, 0),
+-- ('jsm', 'jsm2024', '贾仕铭', 1, 0),
+-- ('dwj', 'dwj2025', '党伟杰', 1, 0),
+-- ('wsq', 'wsq2025', '王斯琪', 1, 0),
+-- ('lzr', 'lzr2025', '李泽润', 1, 0),
+-- ('bjh', 'bjh2026', '卞江辉', 1, 0);
 
 INSERT INTO `sys_role` (`role_name`, `role_code`) VALUES ('管理员', 'ROLE_ADMIN'), ('普通成员', 'ROLE_USER');
 INSERT INTO `sys_user_role` (`user_id`, `role_id`) VALUES (1, 1);
