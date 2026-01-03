@@ -66,10 +66,6 @@ public class GpuMetricLogController {
         wrapper.eq(StringUtils.hasText(serverName), GpuMetricLog::getServerName, serverName);
         wrapper.orderByDesc(GpuMetricLog::getCreateTime);
 
-        // 这里需要在 Service 层实现带条件的查询，暂演示基础分页
-        // LambdaQueryWrapper<GpuMetricLog> wrapper = new LambdaQueryWrapper<>();
-        // wrapper.eq(StringUtils.isNotBlank(serverName), GpuMetricLog::getServerName, serverName)
-        //        .orderByDesc(GpuMetricLog::getCreateTime);
         return Result.success(gpuService.page(pageParam,wrapper));
     }
 

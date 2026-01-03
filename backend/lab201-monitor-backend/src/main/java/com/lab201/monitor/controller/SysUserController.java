@@ -2,8 +2,11 @@ package com.lab201.monitor.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lab201.monitor.common.login.LoginUser;
+import com.lab201.monitor.common.login.LoginUserHolder;
 import com.lab201.monitor.common.result.Result;
 import com.lab201.monitor.common.result.ResultCodeEnum;
+import com.lab201.monitor.common.utils.JwtUtil;
 import com.lab201.monitor.entity.SysRole;
 import com.lab201.monitor.entity.SysUser;
 import com.lab201.monitor.entity.SysUserRole;
@@ -17,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "03. 用户管理")
 @RestController
@@ -78,60 +83,61 @@ public class SysUserController {
 
     @Operation(summary = "登录功能")
     @PostMapping("/login")
-    public Result<SysUser> login(@RequestBody LoginDto loginDto) {
-        // 1. 查用户
+    // ⚠️ 注意：返回值泛型改成了 Map，因为我们要返回 token 和 userInfo 两样东西
+    public Result<Map<String, Object>> login(@RequestBody LoginDto loginDto) {
+        // 1. 查用户 (带上密码字段以便校验)
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUsername, loginDto.getUsername());
+        // 必须select密码，否则默认select=false查出来是null
         wrapper.select(SysUser::getId, SysUser::getUsername, SysUser::getPassword, SysUser::getStatus, SysUser::getRealName, SysUser::getAvatar);
         SysUser user = sysUserService.getOne(wrapper);
 
-        // 2. 校验用户 & 密码
+        // 2. 校验账号密码
         if (user == null) {
-            return Result.fail(ResultCodeEnum.USER_NOT_EXIST);
+            return Result.fail(ResultCodeEnum.USER_NOT_EXIST); // 确保你有这个枚举，或者直接写 Result.fail("用户不存在")
         }
-
-        if(!user.getPassword().equals(loginDto.getPassword())){
+        // 如果数据库是明文密码：
+        if (!user.getPassword().equals(loginDto.getPassword())) {
             return Result.fail(ResultCodeEnum.PASSWORD_ERROR);
         }
-
         if (user.getStatus() == 0) {
             return Result.fail(ResultCodeEnum.USER_DISABLE);
         }
 
-        // =======================================================
-        // 🔥🔥🔥 核心修改：从三张表里查角色 🔥🔥🔥
-        // =======================================================
-
-        // 3.1 先去关联表查 role_id
+        // 3. 获取角色 (逻辑保持不变)
+        String role = "user"; // 默认
         LambdaQueryWrapper<SysUserRole> urWrapper = new LambdaQueryWrapper<>();
         urWrapper.eq(SysUserRole::getUserId, user.getId());
         List<SysUserRole> userRoles = sysUserRoleService.list(urWrapper);
 
-        // 3.2 如果没配置角色，默认给 user
-        String finalRole = "user";
-
-        // 3.3 如果有角色，去角色表查 role_code
         if (!userRoles.isEmpty()) {
-            // 这里为了简单，假设一个用户只有一个角色。如果有多个，你可以取第一个。
-            Long roleId = userRoles.get(0).getRoleId();
-            SysRole sysRole = sysRoleService.getById(roleId);
-
-            if (sysRole != null) {
-                // 数据库存的是 'ROLE_ADMIN'，但前端判断逻辑是 'admin'
-                // 所以我们这里做一个转换
-                if ("ROLE_ADMIN".equals(sysRole.getRoleCode())) {
-                    finalRole = "admin";
-                } else {
-                    finalRole = "user";
-                }
+            SysRole sysRole = sysRoleService.getById(userRoles.get(0).getRoleId());
+            if (sysRole != null && "ROLE_ADMIN".equals(sysRole.getRoleCode())) {
+                role = "admin";
             }
         }
+        // 把查到的角色塞回 user 对象（给前端展示用）
+        user.setRole(role);
+        user.setPassword(null); // 擦除密码
 
-        // 4. 把查到的角色塞进 user 对象传给前端
-        user.setRole(finalRole);
-        user.setPassword(null); // 隐藏密码
+        // 4. 🔥 生成 JWT Token (核心修改)
+        // 将 userId, username, role 写入 Token
+        String token = JwtUtil.createToken(user.getId(), user.getUsername(), role);
 
-        return Result.success(user);
+        // 5. 封装返回值
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("userInfo", user);
+
+        return Result.success(result);
+    }
+
+    @Operation(summary = "获取当前登录用户信息(测试JWT)")
+    @GetMapping("/me")
+    public Result<LoginUser> getCurrentUser() {
+        // 🔥 直接从 ThreadLocal 拿，不需要查数据库，也不用解析 Token（拦截器已经做完了）
+        LoginUser currentUser = LoginUserHolder.getLoginUser();
+        return Result.success(currentUser);
     }
     @Data
     public static class LoginDto {

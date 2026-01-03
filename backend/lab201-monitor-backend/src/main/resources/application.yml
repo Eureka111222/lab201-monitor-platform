@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: lab-monitor
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
 
   # 数据库连接
   datasource:
@@ -37,28 +42,42 @@ spring:
         database-name: default
         collection-name: lab201_collection
         embedding-dimension: 768
+        initialize-schema: true
     ollama:
       base-url: http://192.168.31.130:11434
       chat:
-        model: qwen2.5:7b # 确保你服务器下载了这个模型
         options:
+          model: qwen2.5:7b # 确保你服务器下载了这个模型
+#          model: deepseek-r1:70b # 确保你服务器下载了这个模型
           temperature: 0.7
+      embedding:
+        model: nomic-embed-text
+
+# MinIO 配置
+minio:
+  endpoint: http://192.168.31.130:9000 # 注意：后端走 9000 端口
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: lab201-files
 
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印 SQL 日志
 
-# application.yml
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
-  api-docs:
-    path: /v3/api-docs
-  show-actuator: true
 
+# SpringDoc配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packages-to-scan: com.lab201.monitor
+
+# Knife4j配置
 knife4j:
-  enable: true  # 开发环境开启，生产环境建议改为 false
+  enable: true
   setting:
-    language: zh_cn
+    language: zh-CN
+

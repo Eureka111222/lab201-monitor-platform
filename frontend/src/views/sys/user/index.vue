@@ -1,69 +1,75 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" shadow="never">
-      <template #header>
-        <div class="card-header">
-          <div class="header-left">
-            <el-icon size="20" color="#409EFF"><User /></el-icon>
-            <span class="title">用户列表</span>
-          </div>
-          <el-button type="primary" icon="Plus" @click="handleAdd">新增用户</el-button>
-        </div>
-      </template>
-
-      <el-form :inline="true" :model="queryParams" class="search-form">
-        <el-form-item>
+      <div class="toolbar-container">
+        <div class="toolbar-left">
           <el-input 
             v-model="queryParams.keyword" 
             placeholder="搜索账号 / 姓名" 
             clearable 
-            prefix-icon="Search"
-            @keyup.enter="handleQuery" 
-            style="width: 240px"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="handleResetQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
+            class="search-input"
+            @keyup.enter="handleQuery"
+            @clear="handleQuery"
+          >
+            <template #prefix>
+              <el-icon class="input-icon"><Search /></el-icon>
+            </template>
+          </el-input>
+          
+          <el-button type="primary" plain :icon="Search" @click="handleQuery">搜索</el-button>
+          <el-button :icon="Refresh" @click="handleResetQuery">重置</el-button>
+        </div>
+
+        <div class="toolbar-right">
+          <el-button type="primary" :icon="Plus" @click="handleAdd">新增用户</el-button>
+        </div>
+      </div>
 
       <el-table 
         v-loading="loading" 
         :data="tableData" 
-        style="width: 100%" 
-        border 
+        style="width: 100%; margin-top: 16px" 
         stripe
-        :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
+        highlight-current-row
+        :header-cell-style="{ background: '#f8fafc', color: '#1e293b', fontWeight: '600', height: '50px' }"
+        :row-style="{ height: '60px' }"
       >
-        <el-table-column label="头像" width="80" align="center">
+        <el-table-column label="头像" width="100" align="center">
           <template #default="{ row }">
-            <el-avatar :size="36" :src="row.avatar" :icon="UserFilled" />
+            <div style="display: flex; justify-content: center;">
+              <el-avatar :size="36" :src="row.avatar" :icon="UserFilled" class="user-avatar" />
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column prop="username" label="账号" min-width="120">
+        <el-table-column prop="username" label="账号" min-width="150">
           <template #default="{ row }">
-            <span style="font-weight: 600; color: #303133;">{{ row.username }}</span>
+            <span class="username-text">{{ row.username }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column prop="realName" label="真实姓名" min-width="120" />
+        <el-table-column prop="realName" label="真实姓名" min-width="150" />
 
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="status" label="状态" width="120" align="center">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 1" type="success" effect="light">正常</el-tag>
-            <el-tag v-else type="danger" effect="light">禁用</el-tag>
+            <div class="status-cell">
+              <el-tag v-if="row.status === 1" type="success" effect="light" round class="status-tag">
+                <el-icon><Check /></el-icon><span>正常</span>
+              </el-tag>
+              <el-tag v-else type="danger" effect="plain" round class="status-tag">
+                <el-icon><Close /></el-icon><span>禁用</span>
+              </el-tag>
+            </div>
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="创建时间" width="170" sortable />
+        <el-table-column prop="createTime" label="创建时间" width="180" align="center" sortable />
 
-        <el-table-column label="操作" width="250" fixed="right" align="center">
+        <el-table-column label="操作" width="260" fixed="right" align="center">
           <template #default="scope">
-            <el-button type="primary" link icon="Edit" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="warning" link icon="Key" @click="handleResetPwd(scope.row)">重置密码</el-button>
-            <el-button type="danger" link icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button type="primary" link :icon="Edit" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="warning" link :icon="Key" @click="handleResetPwd(scope.row)">重置密码</el-button>
+            <el-button type="danger" link :icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,13 +91,16 @@
     <el-dialog 
       :title="dialogTitle" 
       v-model="dialogVisible" 
-      width="500px" 
-      append-to-body 
+      width="480px" 
       destroy-on-close
+      :close-on-click-modal="false"
+      class="custom-dialog"
     >
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px" status-icon>
         <el-form-item label="账号" prop="username">
-          <el-input v-model="form.username" placeholder="请输入登录账号" :disabled="!!form.id" />
+          <el-input v-model="form.username" placeholder="请输入登录账号" :disabled="!!form.id">
+             <template #prefix><el-icon><User /></el-icon></template>
+          </el-input>
         </el-form-item>
         
         <el-form-item label="姓名" prop="realName">
@@ -109,6 +118,7 @@
             :inactive-value="0"
             active-text="启用"
             inactive-text="禁用"
+            inline-prompt
           />
         </el-form-item>
       </el-form>
@@ -125,17 +135,17 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+// 🔥 引入所有需要的图标
 import { 
-  User, Search, Refresh, Plus, Edit, Delete, Key, UserFilled 
+  User, Search, Refresh, Plus, Edit, Delete, Key, UserFilled, Check, Close 
 } from '@element-plus/icons-vue'
-// 引入 API
 import { 
   fetchUserPage as pageList, 
   createUser as addUser, 
   updateUser as updateUser, 
   deleteUser as deleteUser 
 } from '@/api/sysUser'
-import type { SysUser } from '@/api/types' // 确保你有这个类型定义，如果没有可以用 any
+import type { SysUser } from '@/api/types'
 
 const loading = ref(false)
 const total = ref(0)
@@ -169,11 +179,10 @@ const getList = async () => {
   loading.value = true
   try {
     const res: any = await pageList(queryParams)
-    // 兼容处理：如果 res 本身包含 records 则用 res，否则尝试 res.data
+    // 兼容不同的接口返回结构
     const pageData = res.records ? res : (res.data || {})
     tableData.value = pageData.records || []
     
-    // Total 兜底逻辑
     const realTotal = Number(pageData.total)
     if (realTotal === 0 && tableData.value.length > 0) {
       total.value = tableData.value.length
@@ -187,17 +196,9 @@ const getList = async () => {
   }
 }
 
-const handleQuery = () => {
-  queryParams.page = 1
-  getList()
-}
+const handleQuery = () => { queryParams.page = 1; getList() }
+const handleResetQuery = () => { queryParams.keyword = ''; getList() }
 
-const handleResetQuery = () => {
-  queryParams.keyword = ''
-  getList()
-}
-
-// 重置表单
 const resetForm = () => {
   form.id = undefined
   form.username = ''
@@ -216,21 +217,17 @@ const handleAdd = () => {
 const handleEdit = (row: SysUser) => {
   resetForm()
   Object.assign(form, row)
-  // 编辑时不传密码，避免覆盖
   form.password = undefined 
   dialogTitle.value = '编辑用户'
   dialogVisible.value = true
 }
 
-// 模拟重置密码功能
 const handleResetPwd = (row: SysUser) => {
   ElMessageBox.confirm(`确认重置用户 "${row.username}" 的密码为 123456 吗？`, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    // 这里如果是真实环境，应该调用 resetPwd API
-    // await resetPwd(row.id)
     ElMessage.success('密码已重置为 123456')
   })
 }
@@ -263,43 +260,71 @@ const submitForm = () => {
   })
 }
 
-onMounted(() => {
-  getList()
-})
+onMounted(() => { getList() })
 </script>
 
 <style scoped>
 .app-container {
-  padding: 20px;
-  background-color: #f0f2f5;
+  padding: 24px;
+  background-color: #f1f5f9;
   min-height: calc(100vh - 60px);
 }
-
 .box-card {
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
-.card-header {
+/* --- 工具栏 (Flex布局核心) --- */
+.toolbar-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* 垂直居中 */
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  height: 50px;
 }
 
-.header-left {
+.toolbar-left {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: center; /* 左侧内容垂直居中 */
+  gap: 12px;
 }
 
-.title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
+/* 输入框样式 */
+.search-input { width: 240px; }
+.input-icon { margin-top: 1px; }
+
+/* 右侧按钮区 */
+.toolbar-right { display: flex; align-items: center; }
+
+/* 表格样式 */
+.username-text { font-weight: 600; color: #334155; }
+.user-avatar { background-color: #f1f5f9; color: #94a3b8; }
+
+/* 状态列居中优化 */
+.status-cell {
+  display: flex;
+  justify-content: center;
+}
+.status-tag {
+  min-width: 80px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* 图标和文字间距 */
+  height: 28px;
+}
+.status-tag span {
+  line-height: 1; /* 防止文字偏移 */
+  display: inline-block;
+  margin-top: 1px;
 }
 
 .pagination-container {
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
   justify-content: flex-end;
 }

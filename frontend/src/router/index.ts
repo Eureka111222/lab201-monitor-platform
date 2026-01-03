@@ -1,60 +1,3 @@
-// import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-// import BasicLayout from '@/layouts/BasicLayout.vue'
-
-// const routes: RouteRecordRaw[] = [
-//   {
-//     path: '/',
-//     redirect: '/dashboard',
-//   },
-//   {
-//     path: '/',
-//     component: BasicLayout,
-//     children: [
-//       {
-//         path: '/dashboard',
-//         name: 'Dashboard',
-//         meta: { title: 'GPU 实时监控', icon: '📊' },
-//         component: () => import('@/views/dashboard/index.vue'),
-//       },
-//       {
-//         path: '/server',
-//         name: 'ServerList',
-//         meta: { title: '服务器列表', icon: '🖥️' },
-//         component: () => import('@/views/server/index.vue'),
-//       },
-//       {
-//         path: '/server/detail/:serverName',
-//         name: 'ServerDetail',
-//         meta: { title: '历史数据详情', hidden: true },
-//         component: () => import('@/views/server/detail.vue'),
-//       },
-//       {
-//         path: '/sys/user',
-//         name: 'SysUser',
-//         meta: { title: '用户管理', icon: '👥' },
-//         component: () => import('@/views/sys/user/index.vue'),
-//       },
-//       {
-//         path: '/sys/document',
-//         name: 'SysDocument',
-//         meta: { title: '知识库', icon: '📚' },
-//         component: () => import('@/views/sys/document/index.vue'),
-//       },
-//     ],
-//   },
-//   { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
-// ]
-
-// const router = createRouter({
-//   history: createWebHistory('/monitor/'),
-//   routes,
-// })
-
-// export default router
-// export { routes }
-
-
-
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import BasicLayout from '@/layouts/BasicLayout.vue'
 
@@ -108,6 +51,16 @@ export const routes: RouteRecordRaw[] = [
         meta: { title: '知识库', icon: '📚' },
         component: () => import('@/views/sys/document/index.vue'),
       },
+      {
+        path: '/wiki',  // 这里的路径即为点击后菜单的索引
+        name: 'Wiki',
+        component: () => import('@/views/server/guide.vue'), // 随便填一个组件，反正不会真的渲染，因为我们会拦截跳转
+
+        meta: { 
+          title: '指导手册', 
+          icon: 'Guide'   // 图标名称，稍后在 Layout 里映射
+        }
+      }
     ],
   },
   {

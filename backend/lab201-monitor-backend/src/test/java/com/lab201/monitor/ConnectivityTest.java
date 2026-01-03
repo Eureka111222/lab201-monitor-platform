@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 class ConnectivityTest {
@@ -47,6 +48,11 @@ class ConnectivityTest {
         // 发送一条测试消息（触发RabbitMQ连接）
         rabbitTemplate.convertAndSend("test-queue", "hello rabbitmq");
         System.out.println("已发送测试消息到RabbitMQ，连接已建立");
+    }
+
+    @Test
+    public void testTime() {
+        System.out.println("-----"+LocalDateTime.now());
     }
 
 }

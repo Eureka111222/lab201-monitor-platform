@@ -1,0 +1,1 @@
+import{V as r}from"./index-Dph3lMDO.js";const o=e=>r({url:"/server-node",method:"post",data:e}),s=e=>r({url:"/server-node",method:"put",data:e}),d=e=>r({url:`/server-node/${e}`,method:"delete"}),n=e=>r({url:"/server-node/page",method:"get",params:e}),u=()=>r({url:"/server-node/list",method:"get"});export{n as a,o as c,d,u as f,s as u};

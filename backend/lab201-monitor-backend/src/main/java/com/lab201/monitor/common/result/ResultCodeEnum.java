@@ -19,6 +19,8 @@ public enum ResultCodeEnum {
     FORBIDDEN(403, "没有权限执行该操作"),
     NOT_FOUND(404, "请求资源不存在"),
     METHOD_NOT_ALLOWED(405, "请求方式不支持"),
+    Token_Empty(406, "Token为空"),
+    Token_Error(407, "Token无效错误"),
 
     // --- 业务逻辑错误 (自定义) ---
     // 1000~1999: 用户与权限

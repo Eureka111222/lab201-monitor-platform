@@ -166,22 +166,61 @@ CREATE TABLE `gpu_metric_log` (
 -- 4. 知识库模块
 -- ========================================================
 
--- [4.1] 知识库文档表 (核心业务表：继承 BaseEntity)
+-- -- [4.1] 知识库文档表 (核心业务表：继承 BaseEntity)
+-- DROP TABLE IF EXISTS `sys_document`;
+-- CREATE TABLE `sys_document` (
+--   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+--   `file_name` VARCHAR(255) NOT NULL,
+--   `file_path` VARCHAR(500) NOT NULL COMMENT 'MinIO路径',
+--   `milvus_id` VARCHAR(128) DEFAULT NULL COMMENT '向量ID',
+--   `status` TINYINT(4) DEFAULT 0 COMMENT '0:解析中 1:成功 2:失败',
+--   `summary` TEXT COMMENT '文档摘要',
+--   
+--   -- BaseEntity 字段
+--   `deleted` TINYINT(4) DEFAULT 0 COMMENT '逻辑删除:1已删 0未删',
+--   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--   `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='知识库文档';
+
+
 DROP TABLE IF EXISTS `sys_document`;
+
 CREATE TABLE `sys_document` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `file_name` VARCHAR(255) NOT NULL,
-  `file_path` VARCHAR(500) NOT NULL COMMENT 'MinIO路径',
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  
+  -- 1. 基础展示信息
+  `title` VARCHAR(255) NOT NULL COMMENT '文档标题(展示用)',
+  `file_name` VARCHAR(255) NOT NULL COMMENT '原始文件名(带后缀)',
+  `file_ext` VARCHAR(20) DEFAULT NULL COMMENT '文件后缀(如 pdf, docx)',
+  `file_size` BIGINT DEFAULT NULL COMMENT '文件大小(字节)',
+  
+  -- 2. MinIO 存储核心字段
+  `bucket_name` VARCHAR(64) NOT NULL COMMENT 'MinIO桶名',
+  `object_name` VARCHAR(255) NOT NULL COMMENT 'MinIO对象名(UUID)',
+  `file_url` VARCHAR(500) DEFAULT NULL COMMENT '预留访问URL',
+  
+  -- 3. 🔥 核心权限控制 🔥
+  -- 0: 私有(仅自己+Admin可见), 1: 公开(全员可见)
+  `view_scope` TINYINT NOT NULL DEFAULT 0 COMMENT '可见范围: 0-私有, 1-全员',
+  
+  -- 4. RAG 知识库扩展 (预留)
+  `is_rag` TINYINT DEFAULT 0 COMMENT '是否存入向量库: 0-否, 1-是',
   `milvus_id` VARCHAR(128) DEFAULT NULL COMMENT '向量ID',
-  `status` TINYINT(4) DEFAULT 0 COMMENT '0:解析中 1:成功 2:失败',
-  `summary` TEXT COMMENT '文档摘要',
+  `parse_status` TINYINT DEFAULT 0 COMMENT '解析状态:-1 不需要解析 0-未解析, 1-处理中, 2-成功, 3-失败',
+  `summary` TEXT COMMENT 'AI摘要',
+
+  -- 5. 标准审计字段 (Enterprise Standard)
+  `uploader_id` BIGINT NOT NULL COMMENT '上传者ID',
+  `uploader_name` VARCHAR(64) DEFAULT NULL COMMENT '上传者姓名(冗余字段用于展示)',
+  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT DEFAULT 0 COMMENT '逻辑删除: 0-正常, 1-删除',
   
-  -- BaseEntity 字段
-  `deleted` TINYINT(4) DEFAULT 0 COMMENT '逻辑删除:1已删 0未删',
-  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
-  PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='知识库文档';
+  PRIMARY KEY (`id`),
+  KEY `idx_uploader` (`uploader_id`), -- 索引：查“我的文档”
+  KEY `idx_scope` (`view_scope`)      -- 索引：查“公开文档”
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='系统知识库文档表';
 
 SET FOREIGN_KEY_CHECKS = 1;

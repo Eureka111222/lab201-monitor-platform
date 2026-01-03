@@ -1,0 +1,113 @@
+H1root账户密码
+lab201
+
+创建环境
+conda create -n 名字 python=版本
+
+查看已经有的环境
+conda env list
+
+查看conda下载的包
+conda list
+
+查看指定包的版本
+conda list 包名
+
+conda换源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+conda删除环境
+conda remove -n 环境名 --all
+
+创建后台进程
+screen -S 进程名字
+
+杀死后台进程
+screen -X -S 进程名字 quit
+
+临时退出，后台正常运行
+ctr +A +D
+
+返回已有后台进程
+screen -r 后台进程名字
+
+查看所有的后台进程
+screen -ls 
+
+如果后台进程已经连接，但是没有退出导致无法连接，从attached变为deattached
+screen -d 进程名字
+
+pip换源 清华源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+查看可用所用的cuda
+ls -l /usr/local | grep cuda
+
+切换cuda命令
+永久切换
+# 1. 先删除当前默认链接（需要 root 权限）
+sudo rm -rf /usr/local/cuda
+
+# 2. 创建新的符号链接指向目标版本（例如切换到 11.7）
+sudo ln -s /usr/local/cuda-11.7 /usr/local/cuda
+
+# 3. 验证切换结果
+nvcc --version  # 应显示切换后的版本（如 11.7）
+
+临时切换cuda
+export CUDA_HOME=/usr/local/cuda-11.8
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+
+
+export LD_LIBRARY_PATH=/usr/local/cuda-12.4/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
+ls /usr/local/cuda-12.4/targets/x86_64-linux/lib | grep libcudnn
+
+查看cudann
+nvcc -V
+which nvcc
+
+查看linux内核
+uname -r
+
+查看自己ubuntu版本
+lsb_release -a
+
+ssh连接vscode
+ssh 用户名@ip/域名 -p 端口号 -A
+
+linux程序断了但是显存还占着-处理
+nvidia-smi
+sudo kill -9 PID
+
+paddle2.5.2cuda11.8下载
+python3 -m pip install paddlepaddle-gpu==2.5.2.post117 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html
+
+vim中显示行号
+/set: nu
+
+vim快速定位到某行
+直接输入 行号gg 如114gg
+
+rsync -av --exclude="要排除的目录名1" --exclude="要排除的目录名2" 源目录/ 目标目录/
+
+查看某个目录的占用大小
+du -sh 目录
+
+查看现在进程那些用户的，top是实时监控进程的工具，默认界面就会显示进程所属用户
+top  找到目标进程（可按 / 输入进程名快速搜索） USER 列即为该进程的运行用户 按 q 退出 top
+
+查看 Linux 服务器版本（发行版信息）
+cat /etc/os-release
+
+针对 Debian/Ubuntu 系列
+lsb_release -a
+
+针对 CentOS/RHEL 系列
+cat /etc/redhat-release
+
+查看完整内核信息（含架构、主机名）
+uname -a
+
+查看内核编译时间和版本详情
+cat /proc/version

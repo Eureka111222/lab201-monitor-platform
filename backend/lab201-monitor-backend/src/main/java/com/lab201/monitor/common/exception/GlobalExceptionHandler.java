@@ -2,6 +2,7 @@ package com.lab201.monitor.common.exception;
 
 import com.lab201.monitor.common.result.Result;
 import com.lab201.monitor.common.result.ResultCodeEnum;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @Slf4j // 开启日志功能
 @RestControllerAdvice
+@Hidden
 public class GlobalExceptionHandler {
 
     /**

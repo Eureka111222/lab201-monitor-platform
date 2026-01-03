@@ -1,35 +1,47 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { login as loginApi } from '@/api/sysUser' // 引入 API
+import { login as loginApi } from '@/api/sysUser'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref<string>('')
   const userInfo = ref<any>(null)
-  const role = ref<'admin' | 'user'>('user') // 默认 user
+  const role = ref<'admin' | 'user'>('user')
 
-  // 真实登录逻辑
   const login = async (form: any) => {
-    // 1. 发送请求给后端
+    // 1. 调用后端登录接口
+    // 后端返回 Result<Map<String, Object>>
+    // res.data = { token: "eyJhb...", userInfo: { ... } }
     const res: any = await loginApi(form)
+    console.log("【调试】后端返回的真实数据:", res)
     
-    // 2. 后端返回了 user 对象 (包含 role)
-    // 注意：具体结构取决于你后端的 Result 封装
-    const user = res // 或者 res.data
+    // 2. 解析数据
+    // 注意：request.ts 里的拦截器如果已经把 response.data.data 提取出来了，
+    // 这里 res 就是那个 Map 对象
+    const data = res 
     
-    // 3. 存入状态
-    userInfo.value = user
-    role.value = user.role || 'user' // 获取数据库里的 role
-    
-    // (可选) 存 token
-    // token.value = user.token 
+    if (data.token) {
+      token.value = data.token          // 存 Token
+      userInfo.value = data.userInfo    // 存 UserInfo
+      role.value = data.userInfo.role   // 存 Role
+      localStorage.setItem('user', JSON.stringify({
+        token: data.token,
+        userInfo: data.userInfo,
+        role: role.value
+      }))
+    } else {
+      // 兼容旧逻辑或者报错
+      console.error("登录返回格式错误", data)
+    }
   }
 
   const logout = () => {
+    token.value = ''
     userInfo.value = null
     role.value = 'user'
+    localStorage.removeItem('user') // 清理持久化
   }
 
-  return { userInfo, role, login, logout }
+  return { token, userInfo, role, login, logout }
 }, {
-  persist: true // 👈👈👈 只需要加这一行，神奇的事情就发生了！
+  persist: true // 开启持久化
 })
