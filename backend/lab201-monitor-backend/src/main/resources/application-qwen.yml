@@ -1,0 +1,17 @@
+spring:
+  ai:
+    model:
+      # 只把“对话生成模型”切到阿里百炼/通义千问。
+      # embedding 继续使用本地 Ollama，避免已有 Milvus 向量集合失效。
+      chat: openai
+      embedding: ollama
+    openai:
+      # 推荐使用 DASHSCOPE_API_KEY；兼容你本机已有的 aliQwen-api 变量。
+      api-key: ${DASHSCOPE_API_KEY:${aliQwen-api:}}
+      chat:
+        # 阿里百炼提供 OpenAI 兼容接口，Spring AI OpenAI starter 可以直接复用。
+        base-url: ${DASHSCOPE_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+        completions-path: /chat/completions
+        options:
+          model: ${DASHSCOPE_CHAT_MODEL:qwen-plus}
+          temperature: 0.7

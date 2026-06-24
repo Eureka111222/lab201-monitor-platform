@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.azure:azure-core-http-netty:1.14.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/azure/azure-core-http-netty/1.14.1/azure-core-http-netty-1.14.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/azure/azure-core-http-netty/1.14.1/azure-core-http-netty-1.14.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/azure/azure-core-http-netty/1.14.1/azure-core-http-netty-1.14.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

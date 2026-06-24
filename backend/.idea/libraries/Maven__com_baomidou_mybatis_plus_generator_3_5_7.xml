@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.baomidou:mybatis-plus-generator:3.5.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/baomidou/mybatis-plus-generator/3.5.7/mybatis-plus-generator-3.5.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/baomidou/mybatis-plus-generator/3.5.7/mybatis-plus-generator-3.5.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/com/baomidou/mybatis-plus-generator/3.5.7/mybatis-plus-generator-3.5.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

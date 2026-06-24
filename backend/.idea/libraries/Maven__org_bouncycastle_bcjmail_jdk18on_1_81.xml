@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.bouncycastle:bcjmail-jdk18on:1.81">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/org/bouncycastle/bcjmail-jdk18on/1.81/bcjmail-jdk18on-1.81.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/org/bouncycastle/bcjmail-jdk18on/1.81/bcjmail-jdk18on-1.81-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../developenvs/maven-repository/org/bouncycastle/bcjmail-jdk18on/1.81/bcjmail-jdk18on-1.81-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

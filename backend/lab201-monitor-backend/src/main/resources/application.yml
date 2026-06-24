@@ -47,11 +47,24 @@ spring:
       base-url: http://192.168.31.130:11434
       chat:
         options:
-          model: qwen2.5:7b # 确保你服务器下载了这个模型
-#          model: deepseek-r1:70b # 确保你服务器下载了这个模型
+#          model: qwen2.5:7b # 确保你服务器下载了这个模型
+          model: deepseek-r1:70b # 确保你服务器下载了这个模型
           temperature: 0.7
       embedding:
         model: nomic-embed-text
+#    openai:
+#      # DeepSeek 官方 API 地址
+#      base-url: https://api.deepseek.com
+#      # 你的 DeepSeek API Key (sk-xxxxxxxx)
+#      api-key: ${env.DEEPSEEK-API}
+#      chat:
+#        options:
+#          # 指定 DeepSeek 的模型名称
+#          # V3模型用: deepseek-chat
+#          # R1推理模型用: deepseek-reasoner
+#          model: deepseek-chat
+#          # 调整温度 (DeepSeek 建议代码生成设为 0)
+#          temperature: 0.7
 
 # MinIO 配置
 minio:

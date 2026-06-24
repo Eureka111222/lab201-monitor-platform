@@ -11,6 +11,7 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.scheduling.annotation.Async;
@@ -36,8 +37,13 @@ public class RagService {
     @Autowired
     private VectorStore vectorStore;
 
+    //@Autowired
+    //@Qualifier("deepseekChatClient")
+    //private ChatClient deepseekChatClient;
+
     @Autowired
-    private ChatClient chatClient;
+    @Qualifier("ollamaChatClient")
+    private ChatClient ollamaChatClient;
 
     /**
      * 1. 异步监听文档解析事件 (入库流程)
@@ -141,7 +147,7 @@ public class RagService {
             用户问题：{query}
             """;
 
-        return chatClient.prompt()
+        return ollamaChatClient.prompt()
                 .user(u -> u.text(prompt)
                         .param("context", context)
                         .param("query", query))
@@ -177,7 +183,7 @@ public class RagService {
             """;
 
         // 🔥 核心区别：使用 .stream().content() 返回 Flux<String>
-        return chatClient.prompt()
+        return ollamaChatClient.prompt()
                 .user(u -> u.text(prompt)
                         .param("context", context)
                         .param("query", query))

@@ -1,0 +1,459 @@
+{'lr': 9.999999999999698e-06, 'loss': 24.932986330823834, 'loss_vfl': 0.5293667441258183, 'loss_bbox': 0.21457479224668732, 'loss_giou': 1.393163713283869, 'loss_vfl_aux_0': 0.4789587063259856, 'loss_bbox_aux_0': 0.2215213809731424, 'loss_giou_aux_0': 1.4226827753791855, 'loss_vfl_aux_1': 0.4934816059017705, 'loss_bbox_aux_1': 0.2184064314621757, 'loss_giou_aux_1': 1.4095786712238947, 'loss_vfl_aux_2': 0.5063481773091417, 'loss_bbox_aux_2': 0.21693665528267936, 'loss_giou_aux_2': 1.4006901069342095, 'loss_vfl_aux_3': 0.5170558619352683, 'loss_bbox_aux_3': 0.21583294893350582, 'loss_giou_aux_3': 1.396592963014625, 'loss_vfl_aux_4': 0.5232442280550613, 'loss_bbox_aux_4': 0.21511327835167346, 'loss_giou_aux_4': 1.3944448768613364, 'loss_vfl_aux_5': 0.43265945457921917, 'loss_bbox_aux_5': 0.23646745555236448, 'loss_giou_aux_5': 1.486450764229066, 'loss_vfl_dn_0': 0.4140365098867434, 'loss_bbox_dn_0': 0.10891545492287175, 'loss_giou_dn_0': 1.188454020849038, 'loss_vfl_dn_1': 0.4289627488594256, 'loss_bbox_dn_1': 0.10031127159056946, 'loss_giou_dn_1': 1.1290482065157161, 'loss_vfl_dn_2': 0.4391866223120586, 'loss_bbox_dn_2': 0.09783412189895015, 'loss_giou_dn_2': 1.1125035483526018, 'loss_vfl_dn_3': 0.449211513693862, 'loss_bbox_dn_3': 0.09705384528113503, 'loss_giou_dn_3': 1.1073593923023768, 'loss_vfl_dn_4': 0.4592559295409833, 'loss_bbox_dn_4': 0.09696021189955774, 'loss_giou_dn_4': 1.1066930243168338, 'loss_vfl_dn_5': 0.4685655314942975, 'loss_bbox_dn_5': 0.09699358549671698, 'loss_giou_dn_5': 1.108069266849782}
+idx = (
+    # batch_idx: 表示每个匹配属于哪个批次
+    tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # 批次0的14个匹配
+             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  # 批次1的23个匹配
+             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  # 批次2的16个匹配
+             3, 3, 3, 3, 3, 3, 3, 3, 3]),  # 批次3的9个匹配
+    
+    # src_idx: 所有匹配的预测框索引
+    tensor([8, 18, 21, 35, 36, 58, 67, 90, 101, 108, 179, 195, 214, 255,  # 批次0的匹配
+             0, 2, 4, 5, 11, 13, 32, 40, 42, 47, 48, 80, 83, 93, 97, 108, 109, 165, 204, 223, 241, 267, 287,  # 批次1的匹配
+             2, 8, 37, 51, 54, 74, 82, 83, 88, 111, 149, 181, 182, 218, 252, 284,  # 批次2的匹配
+             3, 21, 23, 32, 44, 72, 98, 118, 247])  # 批次3的匹配
+)
+
+indices=
+[(tensor([  8,  18,  21,  35,  36,  58,  67,  90, 101, 108, 179, 195, 214, 255]), tensor([ 7,  1,  3,  4, 10,  8,  2, 11, 12,  9,  5,  6,  0, 13])),
+(tensor([  0,   2,   4,   5,  11,  13,  32,  40,  42,  47,  48,  80,  83,  93, 97, 108, 109, 165, 204, 223, 241, 267, 287]), tensor([19, 22,  9, 21,  4, 13,  6, 18,  1,  7,  3, 15, 11, 12,  2, 10, 14, 16, 20,  5, 17,  0,  8])), 
+(tensor([  2,   8,  37,  51,  54,  74,  82,  83,  88, 111, 149, 181, 182, 218, 252, 284]), tensor([15,  2,  8, 12,  5, 13,  4,  3, 14, 10,  0,  7,  6, 11,  9,  1])), 
+(tensor([  3,  21,  23,  32,  44,  72,  98, 118, 247]), tensor([8, 0, 1, 4, 2, 3, 5, 6, 7]))]
+
+
+6
+
+[{
+'boxes': tensor(
+	[[0.2949, 0.7562, 0.0282, 0.0306],
+        [0.2135, 0.7272, 0.0304, 0.0312],
+        [0.2352, 0.6576, 0.0289, 0.0306],
+        [0.3625, 0.6614, 0.0434, 0.0531],
+        [0.3705, 0.6948, 0.0318, 0.0350],
+        [0.3191, 0.5886, 0.0318, 0.0362],
+        [0.3046, 0.5615, 0.0304, 0.0318],
+        [0.3824, 0.4975, 0.0340, 0.0375],
+        [0.3839, 0.4547, 0.0586, 0.0618]], device='cuda:0'), 
+'labels': tensor([3, 3, 3, 5, 3, 3, 3, 4, 5], device='cuda:0'), 
+'image_id': tensor([2806], device='cuda:0'),
+'area': tensor([3477.9692, 1910.9982, 2100.0073, 1959.9788, 5099.9819, 2464.0339,2552.0327, 2142.0061, 2819.9592, 8019.0107], device='cuda:0'), 
+'iscrowd': tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0'), 
+'orig_size': tensor([1400,  788], device='cuda:0'), 
+'size': tensor([1400,  788], device='cuda:0')
+},]
+
+
+"val_dataloader": {
+        "type": "DataLoader",
+        "dataset": {
+            "type": "CocoDetection",
+            "img_folder": "/home/xc/visdrone/val2017/",
+            "ann_file": "/home/xc/visdrone/annotations/instances_val2017x.json",
+            "transforms": {
+                "type": "Compose",
+                "ops": [
+                    {
+                        "type": "Resize",
+                        "size": [
+                            640,
+                            640
+                        ]
+                    },
+                    {
+                        "type": "ToImageTensor"
+                    },
+                    {
+                        "type": "ConvertDtype"
+                    }
+                ]
+            }
+        },
+        "shuffle": false,
+        "batch_size": 8,
+        "num_workers": 4,
+        "drop_last": false,
+        "collate_fn": "default_collate_fn"
+    },
+
+'DataLoader': {
+'_name': 'DataLoader', 
+'_pymodule': <module 'src.data.dataloader' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/dataloader.py'>, 
+'_inject': ['dataset', 'collate_fn'], 
+'_share': [], 
+'dataset': None,
+ 'batch_size': 1,
+ 'shuffle': None, 
+'sampler': None, 
+'batch_sampler': None,
+ 'num_workers': 0, 
+'collate_fn': None, 
+'pin_memory': False, 
+'drop_last': False, 
+'timeout': 0, '
+worker_init_fn': None, 
+'multiprocessing_context': None, 
+'generator': None}, 
+
+'default_collate_fn': <function default_collate_fn at 0x7f36c091e1f0>,
+
+'CocoDetection': {'_name': 'CocoDetection', '_pymodule': <module 'src.data.coco.coco_dataset' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/coco/coco_dataset.py'>, '_inject': ['transforms'], '_share': ['remap_mscoco_category'], 'img_folder': None, 'ann_file': None, 'transforms': None, 'return_masks': None, 'remap_mscoco_category': False},
+
+"train_dataloader": {
+        "type": "DataLoader",
+        "dataset": {
+            "type": "CocoDetection",
+            "img_folder": "/home/xc/visdrone/train2017/",
+            "ann_file": "/home/xc/visdrone/annotations/instances_train2017x.json",
+            "transforms": {
+                "type": "Compose",
+                "ops": [
+                    {
+                        "type": "RandomPhotometricDistort",
+                        "p": 0.5
+                    },
+                    {
+                        "type": "RandomZoomOut",
+                        "fill": 0
+                    },
+                    {
+                        "type": "RandomIoUCrop",
+                        "p": 0.8
+                    },
+                    {
+                        "type": "SanitizeBoundingBox",
+                        "min_size": 1
+                    },
+                    {
+                        "type": "RandomHorizontalFlip"
+                    },
+                    {
+                        "type": "Resize",
+                        "size": [
+                            640,
+                            640
+                        ]
+                    },
+                    {
+                        "type": "ToImageTensor"
+                    },
+                    {
+                        "type": "ConvertDtype"
+                    },
+                    {
+                        "type": "SanitizeBoundingBox",
+                        "min_size": 1
+                    },
+                    {
+                        "type": "ConvertBox",
+                        "out_fmt": "cxcywh",
+                        "normalize": true
+                    }
+                ]
+            },
+            "return_masks": false
+        },
+        "shuffle": true,
+        "batch_size": 4,
+        "num_workers": 4,
+        "drop_last": true,
+        "collate_fn": "default_collate_fn"
+    },    
+
+{'CocoDetection': {'_name': 'CocoDetection', '_pymodule': <module 'src.data.coco.coco_dataset' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/coco/coco_dataset.py'>, '_inject': ['transforms'], '_share': ['remap_mscoco_category'], 'img_folder': None, 'ann_file': None, 'transforms': None, 'return_masks': None, 'remap_mscoco_category': False},
+
+'DataLoader': {
+'_name': 'DataLoader', 
+'_pymodule': <module 'src.data.dataloader' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/dataloader.py'>, 
+'_inject': ['dataset', 'collate_fn'], 
+'_share': [], 
+'dataset': None,
+ 'batch_size': 1,
+ 'shuffle': None, 
+'sampler': None, 
+'batch_sampler': None,
+ 'num_workers': 0, 
+'collate_fn': None, 
+'pin_memory': False, 
+'drop_last': False, 
+'timeout': 0, '
+worker_init_fn': None, 
+'multiprocessing_context': None, 
+'generator': None}, 
+'default_collate_fn': <function default_collate_fn at 0x7f36c091e1f0>,
+
+ "lr_scheduler": {
+        "type": "MultiStepLR",
+        "milestones": [
+            1000
+        ],
+        "gamma": 0.1
+    },
+
+'MultiStepLR': {
+			'_name': 'MultiStepLR',
+			'_pymodule': <module 'torch.optim.lr_scheduler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/lr_scheduler.py'>,
+ 			'_inject': [], 
+			'_share': [], 
+			'optimizer': None, 
+			'milestones': None, 
+			'gamma': 0.1, 
+			'last_epoch': -1, 
+			'verbose': False
+			},
+
+ "optimizer": {
+        "type": "AdamW",
+        "params": [
+            {
+                "params": "backbone",
+                "lr": 1e-05
+            },
+            {
+                "params": "^(?=.*encoder(?=.*bias|.*norm.*weight)).*$",
+                "weight_decay": 0.0
+            },
+            {
+                "params": "^(?=.*decoder(?=.*bias|.*norm.*weight)).*$",
+                "weight_decay": 0.0
+            }
+        ],
+        "lr": 0.0001,
+        "betas": [
+            0.9,
+            0.999
+        ],
+        "weight_decay": 0.0001
+    },
+
+'AdamW': {
+		'_name': 'AdamW', 
+		'_pymodule': <module 'torch.optim.adamw' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/adamw.py'>, 
+		'_inject': [], 
+		'_share': [], 
+		'params': None,
+ 		'lr': 0.001, 
+		'betas': (0.9, 0.999), 
+		'eps': 1e-08, 
+		'weight_decay': 0.01,
+ 		'amsgrad': False
+		}, 
+
+ 'ema': {
+        'type': 'ModelEMA',
+        'decay': 0.9999,
+        'warmups': 2000
+    },
+
+'ModelEMA': {
+		'_name': 'ModelEMA',
+		'_pymodule': <module 'src.optim.ema' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/optim/ema.py'>, 
+		'_inject': [], 
+		'_share': [],
+ 		'model': None, 
+		'decay': 0.9999, 
+		'warmups': 2000
+		}, 
+
+'RTDETRPostProcessor': {
+				'_name': 'RTDETRPostProcessor', 
+				'_pymodule': <module 'src.zoo.rtdetr.rtdetr_postprocessor' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_postprocessor.py'>,
+ 				'_inject': [],
+ 				'_share': ['num_classes', 'use_focal_loss', 'num_top_queries', 'remap_mscoco_category'], 
+				'num_classes': 80, 
+				'use_focal_loss': True, 
+				'num_top_queries': 300, 
+				'remap_mscoco_category': False
+				}, 
+
+'SetCriterion': {
+		'_name': 'SetCriterion',
+		'_pymodule': <module 'src.zoo.rtdetr.rtdetr_criterion' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_criterion.py'>, 
+		'_inject': ['matcher'], 
+		'_share': ['num_classes'], 
+		'matcher': None,
+ 		'weight_dict': None, 
+		'losses': None, 
+		'alpha': 0.2,
+		'gamma': 2.0, 
+		'eos_coef': 0.0001, 
+		'num_classes': 80
+		},
+
+'SetCriterion': {
+		'_name': 'SetCriterion',
+		'_pymodule': <module 'src.zoo.rtdetr.rtdetr_criterion' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_criterion.py'>, 
+		'_inject': ['matcher'], 
+		'_share': ['num_classes'], 
+		'matcher': 'HungarianMatcher',
+ 		'weight_dict': {
+            				'loss_vfl': 1,
+            				'loss_bbox' 5,
+            				'loss_giou' 2
+        				},
+		'losses': ['vfl','boxes']
+		'alpha': 0.75,
+		'gamma': 2.0, 
+		'eos_coef': 0.0001, 
+		'num_classes': 10
+		},
+
+'HungarianMatcher': 
+		{
+		'_name': 'HungarianMatcher', 
+		'_pymodule': <module 'src.zoo.rtdetr.matcher' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/matcher.py'>, 
+		'_inject': [], 
+		'_share': ['use_focal_loss'],
+ 		'weight_dict': {
+                			'cost_class': 2,
+                			'cost_bbox': 5,
+                			'cost_giou': 2
+            				},
+ 		'use_focal_loss': True, 
+		'alpha': 0.25, 
+		'gamma': 2.0
+		}
+
+'HungarianMatcher': 
+		{
+		'_name': 'HungarianMatcher', 
+		'_pymodule': <module 'src.zoo.rtdetr.matcher' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/matcher.py'>, 
+		'_inject': [], 
+		'_share': ['use_focal_loss'],
+ 		'weight_dict': None,
+ 		'use_focal_loss': False, 
+		'alpha': 0.25, 
+		'gamma': 2.0
+		}
+
+
+
+
+ 'PResNet': {
+		'_name': 'PResNet', 
+		'_pymodule': <module 'src.nn.backbone.presnet' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/presnet.py'>, 
+		'_inject': [], 
+		'_share': [], 
+		'depth': None, 
+		'variant': 'd', 
+		'num_stages': 4, 
+		'return_idx': [0, 1, 2, 3], 
+		'act': 'relu',
+		 'freeze_at': -1,
+ 		'freeze_norm': True, 
+		'pretrained': False
+		},
+ 'PResNet': {
+		'_name': 'PResNet', 
+		'_pymodule': <module 'src.nn.backbone.presnet' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/presnet.py'>, 
+		'_inject': [], 
+		'_share': [], 
+		'depth': 50, 
+		'variant': 'd', 
+		'num_stages': 4, 
+		'return_idx': [1, 2, 3], 
+		'act': 'relu',
+		 'freeze_at': 0,
+ 		'freeze_norm': True, 
+		'pretrained': True
+		},
+'RTDETR': {'_name': 'RTDETR', '_pymodule': <module 'src.zoo.rtdetr.rtdetr' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr.py'>, '_inject': ['backbone', 'encoder', 'decoder'], '_share': [], 'backbone': None, 'encoder': None, 'decoder': None, 'multi_scale': None},
+
+'RTDETR': {
+		'_name': 'RTDETR', 
+		'_pymodule': <module 'src.zoo.rtdetr.rtdetr' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr.py'>, 
+		'_inject': ['backbone', 'encoder', 'decoder'], 
+		'_share': [],
+		'backbone': 'PResNet', 
+		'encoder': 'HybridEncoder', 
+		'decoder': 'RTDETRTransformer', 
+		'multi_scale': [480, 512, 544, 576, 608, 640, 640, 640, 672, 704, 736, 768, 800]
+		}
+
+
+{'CocoDetection': {'_name': 'CocoDetection', '_pymodule': <module 'src.data.coco.coco_dataset' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/coco/coco_dataset.py'>, '_inject': ['transforms'], '_share': ['remap_mscoco_category'], 'img_folder': None, 'ann_file': None, 'transforms': None, 'return_masks': None, 'remap_mscoco_category': False},
+
+ 'CIFAR10': {'_name': 'CIFAR10', '_pymodule': <module 'src.data.cifar10' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/cifar10/__init__.py'>, '_inject': ['transform', 'target_transform'], '_share': [], 'root': None, 'train': True, 'transform': None, 'target_transform': None, 'download': False}, 
+
+'DataLoader': {'_name': 'DataLoader', '_pymodule': <module 'src.data.dataloader' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/dataloader.py'>, '_inject': ['dataset', 'collate_fn'], '_share': [], 'dataset': None, 'batch_size': 1, 'shuffle': None, 'sampler': None, 'batch_sampler': None, 'num_workers': 0, 'collate_fn': None, 'pin_memory': False, 'drop_last': False, 'timeout': 0, 'worker_init_fn': None, 'multiprocessing_context': None, 'generator': None}, 
+
+'default_collate_fn': <function default_collate_fn at 0x7f36c091e1f0>,
+
+ 'RandomPhotometricDistort': {'_name': 'RandomPhotometricDistort', '_pymodule': <module 'torchvision.transforms.v2._color' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_color.py'>, '_inject': [], '_share': [], 'brightness': (0.875, 1.125), 'contrast': (0.5, 1.5), 'saturation': (0.5, 1.5), 'hue': (-0.05, 0.05), 'p': 0.5}, 
+
+'RandomZoomOut': {'_name': 'RandomZoomOut', '_pymodule': <module 'torchvision.transforms.v2._geometry' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_geometry.py'>, '_inject': [], '_share': [], 'fill': 0, 'side_range': (1.0, 4.0), 'p': 0.5}, 
+
+'RandomHorizontalFlip': {'_name': 'RandomHorizontalFlip', '_pymodule': <module 'torchvision.transforms.v2._geometry' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_geometry.py'>, '_inject': [], '_share': [], 'p': 0.5},
+
+ 'Resize': {'_name': 'Resize', '_pymodule': <module 'torchvision.transforms.v2._geometry' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_geometry.py'>, '_inject': [], '_share': [], 'size': None, 'interpolation': <InterpolationMode.BILINEAR: 'bilinear'>, 'max_size': None, 'antialias': 'warn'},
+
+ 'ToImageTensor': {'_name': 'ToImageTensor', '_pymodule': <module 'torchvision.transforms.v2._type_conversion' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_type_conversion.py'>, '_inject': [], '_share': []}, 
+
+'ConvertDtype': {'_name': 'ConvertDtype', '_pymodule': <module 'torchvision.transforms.v2._meta' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_meta.py'>, '_inject': [], '_share': [], 'dtype': torch.float32},
+
+ 'SanitizeBoundingBox': {'_name': 'SanitizeBoundingBox', '_pymodule': <module 'torchvision.transforms.v2._misc' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_misc.py'>, '_inject': [], '_share': [], 'min_size': 1.0, 'labels_getter': 'default'}, 
+
+'RandomCrop': {'_name': 'RandomCrop', '_pymodule': <module 'torchvision.transforms.v2._geometry' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_geometry.py'>, '_inject': [], '_share': [], 'size': None, 'padding': None, 'pad_if_needed': False, 'fill': 0, 'padding_mode': 'constant'}, 'Normalize': {'_name': 'Normalize', '_pymodule': <module 'torchvision.transforms.v2._misc' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torchvision/transforms/v2/_misc.py'>, '_inject': [], '_share': [], 'mean': None, 'std': None, 'inplace': False},
+
+ 'Compose': {'_name': 'Compose', '_pymodule': <module 'src.data.transforms' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/transforms.py'>, '_inject': [], '_share': [], 'ops': None}, 'EmptyTransform': {'_name': 'EmptyTransform', '_pymodule': <module 'src.data.transforms' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/transforms.py'>, '_inject': [], '_share': []}, 
+
+'PadToSize': {'_name': 'PadToSize', '_pymodule': <module 'src.data.transforms' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/transforms.py'>, '_inject': [], '_share': [], 'spatial_size': None, 'fill': 0, 'padding_mode': 'constant'},
+
+ 'RandomIoUCrop': {'_name': 'RandomIoUCrop', '_pymodule': <module 'src.data.transforms' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/transforms.py'>, '_inject': [], '_share': [], 'min_scale': 0.3, 'max_scale': 1, 'min_aspect_ratio': 0.5, 'max_aspect_ratio': 2, 'sampler_options': None, 'trials': 40, 'p': 1.0},
+
+ 'ConvertBox': {'_name': 'ConvertBox', '_pymodule': <module 'src.data.transforms' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/data/transforms.py'>, '_inject': [], '_share': [], 'out_fmt': '', 'normalize': False}, 
+
+'Classification': {'_name': 'Classification', '_pymodule': <module 'src.nn.arch.classification' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/arch/classification.py'>, '_inject': ['backbone', 'head'], '_share': [], 'backbone': None, 'head': None},
+
+ 'ClassHead': {'_name': 'ClassHead', '_pymodule': <module 'src.nn.arch.classification' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/arch/classification.py'>, '_inject': [], '_share': [], 'hidden_dim': None, 'num_classes': None}, 
+
+'CrossEntropyLoss': {'_name': 'CrossEntropyLoss', '_pymodule': <module 'torch.nn.modules.loss' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/nn/modules/loss.py'>, '_inject': [], '_share': [], 'weight': None, 'size_average': None, 'ignore_index': -100, 'reduce': None, 'reduction': 'mean', 'label_smoothing': 0.0},
+
+ 'PResNet': {
+		'_name': 'PResNet', 
+		'_pymodule': <module 'src.nn.backbone.presnet' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/presnet.py'>, 
+		'_inject': [], 
+		'_share': [], 
+		'depth': None, 
+		'variant': 'd', 
+		'num_stages': 4, 
+		'return_idx': [0, 1, 2, 3], 
+		'act': 'relu',
+		 'freeze_at': -1,
+ 		'freeze_norm': True, 
+		'pretrained': False
+		},
+
+ 'MResNet': {'_name': 'MResNet', '_pymodule': <module 'src.nn.backbone.test_resnet' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/test_resnet.py'>, '_inject': [], '_share': [], 'num_classes': 10, 'num_blocks': [2, 2, 2, 2]},
+
+ 'RegNet': {'_name': 'RegNet', '_pymodule': <module 'src.nn.backbone.regnet' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/regnet.py'>, '_inject': [], '_share': [], 'configuration': None, 'return_idx': [0, 1, 2, 3]}, 
+
+'DLANet': {'_name': 'DLANet', '_pymodule': <module 'src.nn.backbone.dla' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/nn/backbone/dla.py'>, '_inject': [], '_share': [], 'dla': 'dla34', 'pretrained': True, 'levels': [1, 1, 1, 2, 2, 1], 'in_channels': [16, 32, 64, 128, 256, 512], 'return_index': [1, 2, 3], 'cfg': None}, 
+
+'ModelEMA': {'_name': 'ModelEMA', '_pymodule': <module 'src.optim.ema' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/optim/ema.py'>, '_inject': [], '_share': [], 'model': None, 'decay': 0.9999, 'warmups': 2000}, 
+
+'SGD': {'_name': 'SGD', '_pymodule': <module 'torch.optim.sgd' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/sgd.py'>, '_inject': [], '_share': [], 'params': None, 'lr': <required parameter>, 'momentum': 0, 'dampening': 0, 'weight_decay': 0, 'nesterov': False},
+
+ 'Adam': {'_name': 'Adam', '_pymodule': <module 'torch.optim.adam' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/adam.py'>, '_inject': [], '_share': [], 'params': None, 'lr': 0.001, 'betas': (0.9, 0.999), 'eps': 1e-08, 'weight_decay': 0, 'amsgrad': False}, 
+
+'AdamW': {'_name': 'AdamW', '_pymodule': <module 'torch.optim.adamw' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/adamw.py'>, '_inject': [], '_share': [], 'params': None, 'lr': 0.001, 'betas': (0.9, 0.999), 'eps': 1e-08, 'weight_decay': 0.01, 'amsgrad': False}, 
+
+'MultiStepLR': {'_name': 'MultiStepLR', '_pymodule': <module 'torch.optim.lr_scheduler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/lr_scheduler.py'>, '_inject': [], '_share': [], 'optimizer': None, 'milestones': None, 'gamma': 0.1, 'last_epoch': -1, 'verbose': False},
+
+ 'CosineAnnealingLR': {'_name': 'CosineAnnealingLR', '_pymodule': <module 'torch.optim.lr_scheduler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/lr_scheduler.py'>, '_inject': [], '_share': [], 'optimizer': None, 'T_max': None, 'eta_min': 0, 'last_epoch': -1, 'verbose': False}, 
+
+'OneCycleLR': {'_name': 'OneCycleLR', '_pymodule': <module 'torch.optim.lr_scheduler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/lr_scheduler.py'>, '_inject': [], '_share': [], 'optimizer': None, 'max_lr': None, 'total_steps': None, 'epochs': None, 'steps_per_epoch': None, 'pct_start': 0.3, 'anneal_strategy': 'cos', 'cycle_momentum': True, 'base_momentum': 0.85, 'max_momentum': 0.95, 'div_factor': 25.0, 'final_div_factor': 10000.0, 'three_phase': False, 'last_epoch': -1, 'verbose': False}, 
+
+'LambdaLR': {'_name': 'LambdaLR', '_pymodule': <module 'torch.optim.lr_scheduler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/optim/lr_scheduler.py'>, '_inject': [], '_share': [], 'optimizer': None, 'lr_lambda': None, 'last_epoch': -1, 'verbose': False}, 
+
+'GradScaler': {'_name': 'GradScaler', '_pymodule': <module 'torch.cuda.amp.grad_scaler' from '/home/xc/.conda/envs/xc_rtdetr/lib/python3.9/site-packages/torch/cuda/amp/grad_scaler.py'>, '_inject': [], '_share': [], 'init_scale': 65536.0, 'growth_factor': 2.0, 'backoff_factor': 0.5, 'growth_interval': 2000, 'enabled': True}, 
+
+'RTDETR': {'_name': 'RTDETR', '_pymodule': <module 'src.zoo.rtdetr.rtdetr' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr.py'>, '_inject': ['backbone', 'encoder', 'decoder'], '_share': [], 'backbone': None, 'encoder': None, 'decoder': None, 'multi_scale': None},
+
+ 'HybridEncoder': {'_name': 'HybridEncoder', '_pymodule': <module 'src.zoo.rtdetr.hybrid_encoder' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/hybrid_encoder.py'>, '_inject': [], '_share': [], 'in_channels': [512, 1024, 2048], 'feat_strides': [8, 16, 32], 'hidden_dim': 256, 'nhead': 8, 'dim_feedforward': 1024, 'dropout': 0.0, 'enc_act': 'gelu', 'use_encoder_idx': [2], 'num_encoder_layers': 1, 'pe_temperature': 10000, 'expansion': 1.0, 'depth_mult': 1.0, 'act': 'silu', 'eval_spatial_size': None},
+
+ 'RTDETRTransformer': {'_name': 'RTDETRTransformer', '_pymodule': <module 'src.zoo.rtdetr.rtdetr_decoder' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_decoder.py'>, '_inject': [], '_share': ['num_classes'], 'num_classes': 80, 'hidden_dim': 256, 'num_queries': 300, 'position_embed_type': 'sine', 'feat_channels': [512, 1024, 2048], 'feat_strides': [8, 16, 32], 'num_levels': 3, 'num_decoder_points': 4, 'nhead': 8, 'num_decoder_layers': 6, 'dim_feedforward': 1024, 'dropout': 0.0, 'activation': 'relu', 'num_denoising': 100, 'label_noise_ratio': 0.5, 'box_noise_scale': 1.0, 'learnt_init_query': False, 'eval_spatial_size': None, 'eval_idx': -1, 'eps': 0.01, 'aux_loss': True},
+
+ 'RTDETRPostProcessor': {'_name': 'RTDETRPostProcessor', '_pymodule': <module 'src.zoo.rtdetr.rtdetr_postprocessor' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_postprocessor.py'>, '_inject': [], '_share': ['num_classes', 'use_focal_loss', 'num_top_queries', 'remap_mscoco_category'], 'num_classes': 80, 'use_focal_loss': True, 'num_top_queries': 300, 'remap_mscoco_category': False}, 
+
+'SetCriterion': {'_name': 'SetCriterion', '_pymodule': <module 'src.zoo.rtdetr.rtdetr_criterion' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/rtdetr_criterion.py'>, '_inject': ['matcher'], '_share': ['num_classes'], 'matcher': None, 'weight_dict': None, 'losses': None, 'alpha': 0.2, 'gamma': 2.0, 'eos_coef': 0.0001, 'num_classes': 80},
+
+ 'HungarianMatcher': {'_name': 'HungarianMatcher', '_pymodule': <module 'src.zoo.rtdetr.matcher' from '/home/xc/RT-DETR-main/rtdetr_pytorch/tools/../src/zoo/rtdetr/matcher.py'>, '_inject': [], '_share': ['use_focal_loss'], 'weight_dict': None, 'use_focal_loss': False, 'alpha': 0.25, 'gamma': 2.0}}

@@ -1,0 +1,17 @@
+spring:
+  ai:
+    model:
+      # 只把“对话生成模型”切到 DeepSeek。
+      # embedding 继续使用本地 Ollama，避免已有 Milvus 向量集合失效。
+      chat: openai
+      embedding: ollama
+    openai:
+      # 推荐使用 DEEPSEEK_API_KEY；也可以临时复用 OPENAI_API_KEY。
+      api-key: ${DEEPSEEK_API_KEY:${deepseek-api:}}
+      chat:
+        # DeepSeek 提供 OpenAI 兼容接口，Spring AI OpenAI starter 可以直接复用。
+        base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+        completions-path: /chat/completions
+        options:
+          model: ${DEEPSEEK_CHAT_MODEL:deepseek-chat}
+          temperature: 0.7

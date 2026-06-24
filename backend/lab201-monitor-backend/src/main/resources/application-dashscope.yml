@@ -1,0 +1,41 @@
+spring:
+  ai:
+    model:
+      # Chat + embedding both use Alibaba Cloud Model Studio through OpenAI-compatible APIs.
+      # Use a new Milvus collection when you switch embedding models.
+      chat: openai
+      embedding: openai
+      image: none
+      audio:
+        speech: none
+        transcription: none
+      moderation: none
+    openai:
+      api-key: ${DASHSCOPE_API_KEY:${aliQwen-api:}}
+      chat:
+        base-url: ${DASHSCOPE_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+        completions-path: /chat/completions
+        options:
+          model: ${DASHSCOPE_CHAT_MODEL:qwen-plus}
+          temperature: 0.7
+      embedding:
+        base-url: ${DASHSCOPE_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+        embeddings-path: /embeddings
+        options:
+          model: ${DASHSCOPE_EMBEDDING_MODEL:text-embedding-v4}
+          dimensions: ${DASHSCOPE_EMBEDDING_DIMENSIONS:768}
+    vectorstore:
+      milvus:
+        collection-name: ${MILVUS_COLLECTION_NAME:lab201_collection_dashscope_768}
+        embedding-dimension: ${DASHSCOPE_EMBEDDING_DIMENSIONS:768}
+
+lab201:
+  ai:
+    rerank:
+      provider: ${LAB201_RERANK_PROVIDER:dashscope}
+      fallback-to-local: true
+      dashscope:
+        api-key: ${DASHSCOPE_API_KEY:${aliQwen-api:}}
+        endpoint: ${DASHSCOPE_RERANK_ENDPOINT:https://dashscope.aliyuncs.com/compatible-api/v1/reranks}
+        model: ${DASHSCOPE_RERANK_MODEL:qwen3-rerank}
+        top-n: ${DASHSCOPE_RERANK_TOP_N:5}

@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+//@SpringBootApplication(exclude = {OpenAiEmbeddingAutoConfiguration.class})
 @MapperScan("com.lab201.monitor.mapper")
 @EnableAsync
 public class Lab201MonitorBackendApplication {
